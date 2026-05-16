@@ -1363,6 +1363,34 @@
       margin: 12px 0 10px;
     }
 
+    .route-mode-tabs {
+      background: #F8FAFC;
+      border: 1px solid #E5E7EB;
+      border-radius: 14px;
+      display: grid;
+      gap: 4px;
+      grid-template-columns: repeat(3, 1fr);
+      margin: 10px 0 12px;
+      padding: 4px;
+    }
+
+    .route-mode-btn {
+      background: transparent;
+      border: 0;
+      border-radius: 10px;
+      color: #64748B;
+      cursor: pointer;
+      font: inherit;
+      font-size: 11px;
+      font-weight: 900;
+      min-height: 32px;
+    }
+
+    .route-mode-btn.active {
+      background: #2563EB;
+      color: #fff;
+    }
+
     .trip-btn {
       align-items: center;
       background: #fff;
@@ -1480,6 +1508,101 @@
     .trip-action-stack {
       display: grid;
       gap: 8px;
+    }
+
+    .route-summary-strip {
+      display: grid;
+      gap: 8px;
+      grid-template-columns: repeat(3, 1fr);
+      margin-bottom: 12px;
+    }
+
+    .route-summary-item {
+      background: #F8FAFC;
+      border: 1px solid #EEF2F7;
+      border-radius: 12px;
+      padding: 9px;
+    }
+
+    .route-summary-label {
+      color: #64748B;
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .route-summary-value {
+      color: #111827;
+      font-size: 13px;
+      font-weight: 900;
+      margin-top: 3px;
+    }
+
+    .route-step-list {
+      border: 1px solid #E5E7EB;
+      border-radius: 14px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+
+    .route-step {
+      align-items: flex-start;
+      background: #fff;
+      border-bottom: 1px solid #EEF2F7;
+      display: grid;
+      gap: 10px;
+      grid-template-columns: 24px 1fr auto;
+      padding: 10px;
+    }
+
+    .route-step:last-child { border-bottom: 0; }
+
+    .route-step-dot {
+      align-items: center;
+      background: #EFF6FF;
+      border-radius: 999px;
+      color: #2563EB;
+      display: flex;
+      font-size: 10px;
+      font-weight: 900;
+      height: 24px;
+      justify-content: center;
+      width: 24px;
+    }
+
+    .route-step-title {
+      color: #111827;
+      font-size: 12px;
+      font-weight: 850;
+      line-height: 1.3;
+    }
+
+    .route-step-sub {
+      color: #64748B;
+      font-size: 10px;
+      line-height: 1.35;
+      margin-top: 2px;
+    }
+
+    .route-step-time {
+      color: #2563EB;
+      font-size: 11px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .route-point-marker {
+      align-items: center;
+      border: 3px solid #fff;
+      border-radius: 999px;
+      box-shadow: 0 7px 16px rgba(15,23,42,0.24);
+      color: #fff;
+      display: flex;
+      font-size: 11px;
+      font-weight: 900;
+      height: 28px;
+      justify-content: center;
+      width: 28px;
     }
 
     .bus-marker {
@@ -1885,6 +2008,7 @@
             <button class="bus-filter-btn" data-bus-filter="airport" type="button" onclick="setBusLineFilter('airport')">Aeroport</button>
             <button class="bus-filter-btn" data-bus-filter="brt" type="button" onclick="setBusLineFilter('brt')">BRT</button>
           </div>
+          <button class="trip-btn muted" type="button" style="margin-top:10px;width:100%" onclick="showAllBusLines()">Afficher toutes les lignes</button>
         </div>
         <div id="selectedLineDetails"></div>
         <div id="busLinesList" class="bus-lines-list"></div>
@@ -1992,17 +2116,24 @@
           <div class="trip-card-title">Planifier un trajet</div>
           <div class="trip-field">
             <label for="tripStartInput">Depart</label>
-            <input class="trip-input" id="tripStartInput" type="text" placeholder="Choisir votre position ou ecrire une adresse" onkeydown="if(event.key === 'Enter') setStartFromInput()"/>
+            <input class="trip-input" id="tripStartInput" type="text" list="routePlaceSuggestions" placeholder="Choisir votre position ou ecrire une adresse" onkeydown="if(event.key === 'Enter') setStartFromInput()"/>
           </div>
           <div class="trip-field">
             <label for="tripDestinationInput">Destination</label>
-            <input class="trip-input" id="tripDestinationInput" type="text" placeholder="Ou voulez-vous aller ?" onkeydown="if(event.key === 'Enter') setDestinationFromInput()"/>
+            <input class="trip-input" id="tripDestinationInput" type="text" list="routePlaceSuggestions" placeholder="Ou voulez-vous aller ?" onkeydown="if(event.key === 'Enter') setDestinationFromInput()"/>
+          </div>
+          <datalist id="routePlaceSuggestions"></datalist>
+          <div class="route-mode-tabs" role="group" aria-label="Mode de transport">
+            <button class="route-mode-btn active" data-route-mode="public_transport" type="button" onclick="setRouteMode('public_transport')">Bus</button>
+            <button class="route-mode-btn" data-route-mode="driving" type="button" onclick="setRouteMode('driving')">Voiture</button>
+            <button class="route-mode-btn" data-route-mode="walking" type="button" onclick="setRouteMode('walking')">Marche</button>
           </div>
           <div class="trip-actions-grid">
             <button class="trip-btn" type="button" onclick="enableStartSelection()">Choisir depart sur la carte</button>
             <button class="trip-btn" type="button" onclick="enableDestinationSelection()">Choisir destination sur la carte</button>
           </div>
-          <button class="trip-btn primary" type="button" onclick="findTripFromInputs()">Trouver un bus</button>
+          <button class="trip-btn primary" type="button" onclick="findTripFromInputs()">Calculer l'itineraire</button>
+          <button class="trip-btn muted" type="button" onclick="clearTripPlanning()">Effacer itineraire</button>
           <div class="trip-status" id="tripStatus"></div>
         </div>
         <div id="routeRecommendation"></div>
@@ -2122,6 +2253,8 @@
   integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
   crossorigin=""
 ></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5pdyyriXzuoY_02vgn0Y8DbbsutgXdZg"></script>
+<script src="https://unpkg.com/leaflet.gridlayer.googlemutant@0.15.0/dist/Leaflet.GoogleMutant.js"></script>
 <script>
   let sheetExpanded = false;
   let cityMap;
@@ -2152,6 +2285,10 @@
   let recommendedRouteLine = null;
   let boardingStopMarker = null;
   let exitStopMarker = null;
+  let alternativeRouteLayers = [];
+  let routeStopMarkers = [];
+  let congestionRouteLayer = null;
+  let activeRouteMode = 'public_transport';
   let allStopMarkers = [];
   let activeBusMarkers = {};
   let activeBusAnimationFrame = null;
@@ -2169,10 +2306,28 @@
   let selectedBusProgress = 0;
   let activeRouteId = null;
   let overviewRouteLayers = [];
+  let highlightedRoadLayers = [];
   let activeBusFilter = 'all';
   const activeReservations = [];
   const RESERVATION_TIMEOUT = 120000;
   const DEFAULT_USER_POSITION = [31.6295, -7.9811];
+  const highlightedBoulevard = [
+    [31.6552, -8.0192],
+    [31.6536, -8.0191],
+    [31.6520, -8.0190],
+    [31.6504, -8.0188],
+    [31.6488, -8.0186],
+    [31.6472, -8.0184],
+    [31.6456, -8.0181],
+    [31.6440, -8.0178],
+    [31.6424, -8.0175],
+    [31.6408, -8.0172],
+    [31.6392, -8.0169],
+    [31.6376, -8.0166],
+    [31.6360, -8.0163],
+    [31.6348, -8.0161]
+  ];
+  const highlightedRoads = [highlightedBoulevard];
   const PARKING_SEARCH_RADIUS_KM = 1;
   const PARKING_EXPANDED_RADIUS_KM = 3;
   const marrakechPlaces = [
@@ -2280,15 +2435,13 @@
       doubleClickZoom: true
     });
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(cityMap);
+    addBaseMapLayer();
 
     L.control.zoom({
       position: 'bottomright'
     }).addTo(cityMap);
 
+    drawHighlightedRoads();
     showParkingLotsOnMap();
     drawBusOverviewLines();
 
@@ -2300,14 +2453,88 @@
     setTimeout(refreshMapSize, 700);
   }
 
+  function addBaseMapLayer() {
+    if (window.google && L.gridLayer?.googleMutant) {
+      L.gridLayer.googleMutant({
+        type: 'roadmap',
+        maxZoom: 19
+      }).addTo(cityMap);
+      return;
+    }
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(cityMap);
+  }
+
+  function drawHighlightedRoads() {
+    if (!cityMap || !window.L || highlightedRoadLayers.length) return;
+    highlightedRoads.forEach(roadCoords => drawHighlightedRoad(roadCoords));
+  }
+
+  function drawHighlightedRoad(roadCoords) {
+    if (window.google?.maps?.DirectionsService) {
+      const directionsService = new google.maps.DirectionsService();
+      directionsService.route({
+        origin: toGoogleLatLng(roadCoords[0]),
+        destination: toGoogleLatLng(roadCoords[roadCoords.length - 1]),
+        waypoints: roadCoords.slice(1, -1).map(coords => ({
+          location: toGoogleLatLng(coords),
+          stopover: false
+        })),
+        travelMode: google.maps.TravelMode.DRIVING
+      }, (result, status) => {
+        const routePath = status === google.maps.DirectionsStatus.OK
+          ? result.routes[0].overview_path.map(point => [point.lat(), point.lng()])
+          : roadCoords;
+        drawHighlightedRoadPath(routePath);
+      });
+      return;
+    }
+
+    drawHighlightedRoadPath(roadCoords);
+  }
+
+  function toGoogleLatLng(coords) {
+    return { lat: coords[0], lng: coords[1] };
+  }
+
+  function drawHighlightedRoadPath(pathCoords) {
+    const layer = L.polyline(pathCoords, {
+      color: '#ef4444',
+      weight: 8,
+      opacity: 0.9,
+      lineCap: 'round',
+      lineJoin: 'round',
+      interactive: false
+    }).addTo(cityMap);
+
+    highlightedRoadLayers.push(layer);
+    layer.bringToFront();
+  }
+
   async function startApp() {
     await loadParkingLots();
     await loadBusLines();
     initLeafletMap();
+    populateRouteSuggestions();
     renderBusLinesList();
     renderParkingService();
     startReservationCountdown();
     startParkingLiveSimulation();
+  }
+
+  function populateRouteSuggestions() {
+    const target = document.getElementById('routePlaceSuggestions');
+    if (!target) return;
+    const names = new Set(marrakechPlaces.map(place => place.name));
+    busLines.forEach(line => line.stops.forEach(stop => names.add(stop.name)));
+    target.innerHTML = Array.from(names)
+      .sort((a, b) => a.localeCompare(b))
+      .slice(0, 160)
+      .map(name => `<option value="${name}"></option>`)
+      .join('');
   }
 
   if (document.readyState === 'loading') {
@@ -2405,13 +2632,13 @@
     if (!activeRouteId) return;
 
     overviewRouteLayers = busLines
-      .filter(line => line.id === activeRouteId)
+      .filter(line => activeRouteId === 'all' ? ['urban', 'airport', 'brt'].includes(line.type) : line.id === activeRouteId)
       .map(line => {
         const coords = getLineRouteCoords(line);
         const layer = L.polyline(coords, {
           color: line.color,
-          weight: 6,
-          opacity: 1
+          weight: activeRouteId === 'all' ? 4 : 6,
+          opacity: activeRouteId === 'all' ? 0.42 : 1
         }).addTo(cityMap);
         layer.on('click', () => showBusLine(line.id));
         layer.bindPopup(`${line.name}<br>${line.from} -> ${line.to}`);
@@ -2452,6 +2679,18 @@
       button.classList.toggle('active', button.dataset.busFilter === filter);
     });
     renderBusLinesList();
+  }
+
+  function showAllBusLines() {
+    clearSelectedLine();
+    activeRouteId = 'all';
+    drawBusOverviewLines();
+    if (cityMap && overviewRouteLayers.length) {
+      const points = busLines
+        .filter(line => ['urban', 'airport', 'brt'].includes(line.type))
+        .flatMap(line => getLineRouteCoords(line));
+      cityMap.fitBounds(L.latLngBounds(points), { padding: [42, 42], maxZoom: 13 });
+    }
   }
 
   function showBusLine(lineId) {
@@ -2606,7 +2845,7 @@
     startLocation = { coords, label };
     selectingStart = false;
     if (startMarker) startMarker.remove();
-    startMarker = L.marker(coords, { icon: createMapIcon('D', '#2563EB') })
+    startMarker = L.marker(coords, { icon: createRoutePointIcon('D', '#22C55E') })
       .addTo(cityMap)
       .bindPopup('Votre position de depart');
     const input = document.getElementById('tripStartInput');
@@ -2618,7 +2857,7 @@
     destinationLocation = { coords, label };
     selectingDestination = false;
     if (destinationMarker) destinationMarker.remove();
-    destinationMarker = L.marker(coords, { icon: createMapIcon('A', '#16A34A') })
+    destinationMarker = L.marker(coords, { icon: createRoutePointIcon('A', '#EF4444') })
       .addTo(cityMap)
       .bindPopup('Votre destination');
     const input = document.getElementById('tripDestinationInput');
@@ -2654,20 +2893,115 @@
         setTripStatus('Choisissez un depart et une destination.');
         return;
       }
-      const result = findBestBusRoute(startLocation, destinationLocation);
+      setTripStatus('Calcul de l itineraire...');
+      const result = await calculateRoute(startLocation, destinationLocation, activeRouteMode);
       if (!result) {
-        setTripStatus('Aucune ligne proche du depart et de la destination.');
+        setTripStatus('Aucun itineraire trouve pour ce mode.');
         return;
       }
       recommendedTripResult = result;
-      recommendedBus = findBestAvailableBusForStop(createActiveBusesForLine(result.line), result.boardingStop, result.line);
-      result.recommendedBus = recommendedBus;
+      if (result.mode === 'public_transport') {
+        recommendedBus = findBestAvailableBusForStop(createActiveBusesForLine(result.line), result.boardingStop, result.line);
+        result.recommendedBus = recommendedBus;
+      }
       renderRouteRecommendation(result);
       showRecommendedRoute(result);
-      setTripStatus('Meilleure ligne trouvee.');
+      setTripStatus('Itineraire pret.');
     } catch (error) {
       setTripStatus(error.message || 'Recherche impossible pour le moment.');
     }
+  }
+
+  function setRouteMode(mode) {
+    activeRouteMode = mode;
+    document.querySelectorAll('.route-mode-btn').forEach(button => {
+      button.classList.toggle('active', button.dataset.routeMode === mode);
+    });
+  }
+
+  async function calculateRoute(origin, destination, mode = activeRouteMode) {
+    if (mode === 'public_transport') return calculatePublicTransportRoute(origin, destination);
+    return calculateRoadRoute(origin, destination, mode);
+  }
+
+  function calculatePublicTransportRoute(origin, destination) {
+    const result = findBestBusRoute(origin, destination);
+    if (!result) return null;
+    const busPath = getRouteSlice(result.line, result.boardingIndex, result.exitIndex);
+    const path = [origin.coords, result.boardingStop.coords, ...busPath, result.exitStop.coords, destination.coords];
+    const distanceMeters =
+      result.distanceToBoardingStop +
+      result.routeDistanceMeters +
+      result.distanceFromExitToDestination;
+    const alternatives = busLines
+      .filter(line => line.id !== result.line.id)
+      .map(line => {
+        const boarding = findNearestStop(line, origin.coords);
+        const exit = findNearestStop(line, destination.coords);
+        if (!boarding || !exit || boarding.index >= exit.index) return null;
+        return getRouteSlice(line, boarding.index, exit.index);
+      })
+      .filter(Boolean)
+      .slice(0, 2);
+
+    return {
+      ...result,
+      mode: 'public_transport',
+      path,
+      alternatives,
+      distanceMeters,
+      durationMinutes: result.totalEstimatedMinutes,
+      steps: [
+        { icon: '1', title: `Marcher vers ${result.boardingStop.name}`, subtitle: `${formatMeters(result.distanceToBoardingStop)} jusqu a l arret`, minutes: result.estimatedWalkToStopMinutes },
+        { icon: '2', title: `Prendre ${result.line.name}`, subtitle: `${result.boardingStop.name} -> ${result.exitStop.name}`, minutes: result.estimatedBusRideMinutes },
+        { icon: '3', title: `Marcher vers ${destination.label}`, subtitle: `${formatMeters(result.distanceFromExitToDestination)} depuis ${result.exitStop.name}`, minutes: result.estimatedWalkFromStopMinutes }
+      ]
+    };
+  }
+
+  async function calculateRoadRoute(origin, destination, mode) {
+    const profile = mode === 'walking' ? 'foot' : 'car';
+    const url = `https://router.project-osrm.org/route/v1/${profile}/${origin.coords[1]},${origin.coords[0]};${destination.coords[1]},${destination.coords[0]}?overview=full&geometries=geojson&alternatives=true&steps=false`;
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('OSRM indisponible');
+      const data = await response.json();
+      if (!data.routes?.length) throw new Error('Aucun itineraire trouve');
+      const [primary, ...alternatives] = data.routes;
+      return {
+        mode,
+        path: primary.geometry.coordinates.map(([lng, lat]) => [lat, lng]),
+        alternatives: alternatives.slice(0, 2).map(route => route.geometry.coordinates.map(([lng, lat]) => [lat, lng])),
+        distanceMeters: primary.distance,
+        durationMinutes: Math.max(1, Math.round(primary.duration / 60)),
+        steps: buildDirectRouteSteps(origin, destination, mode, primary.distance, primary.duration)
+      };
+    } catch (error) {
+      const distanceMeters = haversineDistance(origin.coords, destination.coords) * 1000;
+      const speed = mode === 'walking' ? 80 : 520;
+      return {
+        mode,
+        path: [origin.coords, destination.coords],
+        alternatives: [],
+        distanceMeters,
+        durationMinutes: Math.max(1, Math.round(distanceMeters / speed)),
+        steps: buildDirectRouteSteps(origin, destination, mode, distanceMeters, distanceMeters / speed * 60)
+      };
+    }
+  }
+
+  function buildDirectRouteSteps(origin, destination, mode, distanceMeters, durationSeconds) {
+    const action = mode === 'walking' ? 'Marcher' : 'Conduire';
+    return [
+      { icon: '1', title: `${action} depuis ${origin.label}`, subtitle: `${formatMeters(distanceMeters)} vers ${destination.label}`, minutes: Math.max(1, Math.round(durationSeconds / 60)) },
+      { icon: '2', title: 'Arriver a destination', subtitle: destination.label, minutes: 0 }
+    ];
+  }
+
+  function getRouteSlice(line, startIndex, exitIndex) {
+    const route = getLineRouteCoords(line);
+    if (route.length === line.stops.length) return route.slice(startIndex, exitIndex + 1);
+    return line.stops.slice(startIndex, exitIndex + 1).map(stop => stop.coords);
   }
 
   function findBestBusRoute(start, destination) {
@@ -2733,34 +3067,50 @@
   function renderRouteRecommendation(result) {
     const target = document.getElementById('routeRecommendation');
     if (!target) return;
-    const bus = result.recommendedBus;
-    const eta = bus ? calculateETA(bus.position, result.boardingStop) : 0;
-    const occupancy = bus ? getOccupancyLabel(bus.occupancy) : '-';
+    const bus = result.recommendedBus || null;
+    const eta = bus && result.boardingStop ? calculateETA(bus.position, result.boardingStop) : 0;
+    const modeLabels = { public_transport: 'Transport public', driving: 'Voiture', walking: 'Marche' };
+    const duration = result.mode === 'public_transport' ? result.durationMinutes + eta : result.durationMinutes;
+    const lineBadge = result.mode === 'public_transport' ? result.line.name : modeLabels[result.mode];
     target.innerHTML = `
-      <div class="trip-card">
+      <div class="trip-card route-result-card">
         <div class="trip-reco-head">
           <div>
-            <div class="trip-route-name">Bus recommande</div>
-            <div class="trip-route-sub">${result.line.from} vers ${result.line.to}</div>
+            <div class="trip-route-name">Itineraire recommande</div>
+            <div class="trip-route-sub">${startLocation.label} -> ${destinationLocation.label}</div>
           </div>
-          <span class="trip-line-badge">${result.line.name}</span>
+          <span class="trip-line-badge">${lineBadge}</span>
         </div>
-        <div class="trip-detail-list">
-          <div class="trip-detail-row"><span class="trip-detail-label">Montez a</span><span class="trip-detail-value">${result.boardingStop.name}</span></div>
-          <div class="trip-detail-row"><span class="trip-detail-label">Descendez a</span><span class="trip-detail-value">${result.exitStop.name}</span></div>
-          <div class="trip-detail-row"><span class="trip-detail-label">Marche jusqu'a l'arret</span><span class="trip-detail-value">${result.estimatedWalkToStopMinutes} min</span></div>
-          <div class="trip-detail-row"><span class="trip-detail-label">Marche apres descente</span><span class="trip-detail-value">${result.estimatedWalkFromStopMinutes} min</span></div>
-          <div class="trip-detail-row"><span class="trip-detail-label">Bus disponible le plus proche</span><span class="trip-detail-value">${bus ? bus.id : '-'} - ${eta} min</span></div>
-          <div class="trip-detail-row"><span class="trip-detail-label">Position actuelle</span><span class="trip-detail-value" id="liveBusPosition">${bus ? getNearestStopName(result.line, bus.position) : '-'}</span></div>
-          <div class="trip-detail-row"><span class="trip-detail-label">Occupation</span><span class="trip-detail-value">${occupancy}</span></div>
-          <div class="trip-detail-row"><span class="trip-detail-label">Duree estimee du trajet</span><span class="trip-detail-value">${result.totalEstimatedMinutes + eta} min</span></div>
-          <div class="trip-detail-row"><span class="trip-detail-label">Bus actifs sur cette ligne</span><span class="trip-detail-value">${activeBuses.filter(item => item.lineId === result.line.id).length}</span></div>
+        <div class="route-summary-strip">
+          <div class="route-summary-item"><div class="route-summary-label">Duree</div><div class="route-summary-value">${duration} min</div></div>
+          <div class="route-summary-item"><div class="route-summary-label">Distance</div><div class="route-summary-value">${formatMeters(result.distanceMeters)}</div></div>
+          <div class="route-summary-item"><div class="route-summary-label">Mode</div><div class="route-summary-value">${modeLabels[result.mode]}</div></div>
+        </div>
+        ${result.mode === 'public_transport' ? `
+          <div class="trip-detail-list">
+            <div class="trip-detail-row"><span class="trip-detail-label">Montez a</span><span class="trip-detail-value">${result.boardingStop.name}</span></div>
+            <div class="trip-detail-row"><span class="trip-detail-label">Descendez a</span><span class="trip-detail-value">${result.exitStop.name}</span></div>
+            <div class="trip-detail-row"><span class="trip-detail-label">Bus le plus proche</span><span class="trip-detail-value">${bus ? bus.id : '-'} - ${eta} min</span></div>
+            <div class="trip-detail-row"><span class="trip-detail-label">Position actuelle</span><span class="trip-detail-value" id="liveBusPosition">${bus ? getNearestStopName(result.line, bus.position) : '-'}</span></div>
+          </div>
+        ` : ''}
+        <div class="route-step-list">
+          ${result.steps.map(step => `
+            <div class="route-step">
+              <div class="route-step-dot">${step.icon}</div>
+              <div>
+                <div class="route-step-title">${step.title}</div>
+                <div class="route-step-sub">${step.subtitle}</div>
+              </div>
+              <div class="route-step-time">${step.minutes ? `${step.minutes} min` : ''}</div>
+            </div>
+          `).join('')}
         </div>
         <div class="trip-action-stack">
-          <button class="trip-btn primary" type="button" onclick="followBusesArea()">Suivre les bus</button>
-          <button class="trip-btn muted" id="followRecommendedBusBtn" type="button" onclick="followRecommendedBus()">Suivre le bus recommande</button>
-          <button class="trip-btn muted" type="button" onclick="showAllStopsForRecommendedRoute()">Voir tous les arrets</button>
-          <button class="trip-btn danger" type="button" onclick="clearTripPlanning()">Reinitialiser</button>
+          <button class="trip-btn primary" type="button" onclick="followBusesArea()">Demarrer</button>
+          <button class="trip-btn muted" type="button" onclick="toggleRouteAlternatives()">Voir alternatives</button>
+          ${result.mode === 'public_transport' ? '<button class="trip-btn muted" id="followRecommendedBusBtn" type="button" onclick="followRecommendedBus()">Suivre le bus recommande</button><button class="trip-btn muted" type="button" onclick="showAllStopsForRecommendedRoute()">Voir tous les arrets</button>' : ''}
+          <button class="trip-btn danger" type="button" onclick="clearTripPlanning()">Effacer itineraire</button>
         </div>
       </div>
     `;
@@ -2768,22 +3118,56 @@
 
   function showRecommendedRoute(result) {
     clearRecommendedMapLayers(false);
-    const routeCoords = result.line.stops.map(stop => stop.coords);
-    recommendedRouteLine = L.polyline(routeCoords, {
-      color: result.line.color || '#2563EB',
-      weight: 6,
-      opacity: 0.92
-    }).addTo(cityMap).bindPopup(result.line.name);
+    alternativeRouteLayers = result.alternatives.map(path =>
+      L.polyline(path, {
+        color: '#94A3B8',
+        weight: 5,
+        opacity: 0.55,
+        lineCap: 'round',
+        lineJoin: 'round'
+      }).addTo(cityMap)
+    );
+    recommendedRouteLine = L.polyline(result.path, {
+      color: '#2563EB',
+      weight: 7,
+      opacity: 0.96,
+      lineCap: 'round',
+      lineJoin: 'round'
+    }).addTo(cityMap).bindPopup('Itineraire recommande');
+    recommendedRouteLine.bringToFront();
 
-    boardingStopMarker = L.marker(result.boardingStop.coords, { icon: createStopIcon('ON', '#2563EB') })
-      .addTo(cityMap)
-      .bindPopup(`Montez a : ${result.boardingStop.name}`);
-    exitStopMarker = L.marker(result.exitStop.coords, { icon: createStopIcon('OFF', '#16A34A', true) })
-      .addTo(cityMap)
-      .bindPopup(`Descendez a : ${result.exitStop.name}`);
+    if (result.mode === 'public_transport') {
+      boardingStopMarker = L.marker(result.boardingStop.coords, { icon: createStopIcon('BUS', '#2563EB') })
+        .addTo(cityMap)
+        .bindPopup(`Montez a : ${result.boardingStop.name}`);
+      exitStopMarker = L.marker(result.exitStop.coords, { icon: createStopIcon('OFF', '#2563EB', true) })
+        .addTo(cityMap)
+        .bindPopup(`Descendez a : ${result.exitStop.name}`);
+      routeStopMarkers = result.line.stops
+        .slice(result.boardingIndex, result.exitIndex + 1)
+        .map(stop => L.circleMarker(stop.coords, {
+          radius: 4,
+          color: '#2563EB',
+          fillColor: '#fff',
+          fillOpacity: 1,
+          weight: 2
+        }).addTo(cityMap).bindPopup(`${result.line.name} - ${stop.name}`));
 
-    const buses = createActiveBusesForLine(result.line);
-    startMultipleBusTracking(result.line, buses);
+      const congestionPath = getRouteSlice(result.line, result.boardingIndex, Math.min(result.exitIndex, result.boardingIndex + 2));
+      if (congestionPath.length > 1) {
+        congestionRouteLayer = L.polyline(congestionPath, {
+          color: '#EF4444',
+          weight: 8,
+          opacity: 0.88,
+          lineCap: 'round',
+          lineJoin: 'round'
+        }).addTo(cityMap).bindPopup('Segment congestionne');
+      }
+
+      const buses = createActiveBusesForLine(result.line);
+      startMultipleBusTracking(result.line, buses);
+    }
+
     followBusesArea();
   }
 
@@ -2898,10 +3282,13 @@
     const points = [
       startLocation?.coords,
       destinationLocation?.coords,
-      recommendedTripResult.boardingStop.coords,
-      recommendedTripResult.exitStop.coords,
+      recommendedTripResult.boardingStop?.coords,
+      recommendedTripResult.exitStop?.coords,
       recommendedBus?.position
     ].filter(Boolean);
+    if (recommendedTripResult.path?.length) {
+      points.push(...recommendedTripResult.path);
+    }
     if (points.length) cityMap.fitBounds(L.latLngBounds(points), { padding: [44, 44], maxZoom: 15 });
   }
 
@@ -2951,9 +3338,15 @@
     if (recommendedRouteLine) recommendedRouteLine.remove();
     if (boardingStopMarker) boardingStopMarker.remove();
     if (exitStopMarker) exitStopMarker.remove();
+    alternativeRouteLayers.forEach(layer => layer.remove());
+    routeStopMarkers.forEach(marker => marker.remove());
+    if (congestionRouteLayer) congestionRouteLayer.remove();
     recommendedRouteLine = null;
     boardingStopMarker = null;
     exitStopMarker = null;
+    alternativeRouteLayers = [];
+    routeStopMarkers = [];
+    congestionRouteLayer = null;
     allStopMarkers.forEach(marker => marker.remove());
     allStopMarkers = [];
     Object.values(activeBusMarkers).forEach(marker => marker.remove());
@@ -2980,6 +3373,16 @@
       html: `<div class="bus-marker ${occupancy}">B</div>`,
       iconSize: [30, 30],
       iconAnchor: [15, 15],
+      popupAnchor: [0, -18]
+    });
+  }
+
+  function createRoutePointIcon(label, color) {
+    return L.divIcon({
+      className: '',
+      html: `<div class="route-point-marker" style="background:${color}">${label}</div>`,
+      iconSize: [28, 28],
+      iconAnchor: [14, 14],
       popupAnchor: [0, -18]
     });
   }
@@ -3011,6 +3414,21 @@
   function setTripStatus(message) {
     const target = document.getElementById('tripStatus');
     if (target) target.textContent = message;
+  }
+
+  function formatMeters(distanceMeters) {
+    if (!Number.isFinite(distanceMeters)) return '-';
+    if (distanceMeters < 1000) return `${Math.round(distanceMeters)} m`;
+    return `${(distanceMeters / 1000).toFixed(1)} km`;
+  }
+
+  function toggleRouteAlternatives() {
+    if (!alternativeRouteLayers.length) {
+      showToast('Aucune alternative disponible pour cet itineraire.');
+      return;
+    }
+    const hidden = alternativeRouteLayers[0].options.opacity === 0;
+    alternativeRouteLayers.forEach(layer => layer.setStyle({ opacity: hidden ? 0.55 : 0 }));
   }
 
   function getTrafficStatus(vehicleCount) {
@@ -3411,10 +3829,20 @@
 
   function searchMockPlace(query) {
     const normalizedQuery = normalizeText(query);
-    return marrakechPlaces.find(place =>
+    const knownPlace = marrakechPlaces.find(place =>
       normalizeText(place.name).includes(normalizedQuery) ||
       normalizedQuery.includes(normalizeText(place.name))
     );
+    if (knownPlace) return knownPlace;
+
+    for (const line of busLines) {
+      const stop = line.stops.find(item =>
+        normalizeText(item.name).includes(normalizedQuery) ||
+        normalizedQuery.includes(normalizeText(item.name))
+      );
+      if (stop) return { name: stop.name, coords: stop.coords };
+    }
+    return null;
   }
 
   async function geocodeLocation(query) {
@@ -3780,6 +4208,7 @@
   window.geocodeLocation = geocodeLocation;
   window.renderBusLinesList = renderBusLinesList;
   window.setBusLineFilter = setBusLineFilter;
+  window.showAllBusLines = showAllBusLines;
   window.showBusLine = showBusLine;
   window.clearSelectedLine = clearSelectedLine;
   window.renderLineDetails = renderLineDetails;
@@ -3792,6 +4221,9 @@
   window.setStartFromInput = setStartFromInput;
   window.setDestinationFromInput = setDestinationFromInput;
   window.findTripFromInputs = findTripFromInputs;
+  window.setRouteMode = setRouteMode;
+  window.calculateRoute = calculateRoute;
+  window.toggleRouteAlternatives = toggleRouteAlternatives;
   window.findBestBusRoute = findBestBusRoute;
   window.findNearestStop = findNearestStop;
   window.calculateWalkingTime = calculateWalkingTime;
