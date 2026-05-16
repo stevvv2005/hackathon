@@ -221,7 +221,8 @@
     .top-actions {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 4px;
+      flex: 0 0 auto;
     }
 
     .icon-btn {
@@ -1740,10 +1741,442 @@
     #panel-bus > .bs-title:nth-of-type(2) {
       display: none !important;
     }
+
+    /* ═══ HACKATHON WOW UI ═══ */
+    body.day-theme { background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 45%, #f8fafc 100%); }
+    body.night-theme { background: linear-gradient(135deg, #111827 0%, #312e81 55%, #020617 100%); }
+    body.dark-mode #cf-app { background: #0f172a; }
+    body.dark-mode .top-bar,
+    body.dark-mode .bottom-nav,
+    body.dark-mode .bs-handle-area,
+    body.dark-mode .bs-content {
+      background: rgba(15,23,42,0.94);
+      border-color: rgba(148,163,184,0.24);
+      color: #E5E7EB;
+    }
+    body.dark-mode .trip-card,
+    body.dark-mode .feature-card,
+    body.dark-mode .parking-card,
+    body.dark-mode .bus-line-card,
+    body.dark-mode .bus-lines-toolbar,
+    body.dark-mode .bus-line-detail,
+    body.dark-mode .route-summary-item,
+    body.dark-mode .route-step,
+    body.dark-mode .trip-detail-row,
+    body.dark-mode .quick-card {
+      background: #111827;
+      border-color: #334155;
+      color: #E5E7EB;
+    }
+    body.dark-mode .bs-title,
+    body.dark-mode .logo-text,
+    body.dark-mode .trip-card-title,
+    body.dark-mode .trip-route-name,
+    body.dark-mode .bus-line-title,
+    body.dark-mode .parking-name,
+    body.dark-mode .route-step-title,
+    body.dark-mode .route-summary-value { color: #F8FAFC; }
+    body.dark-mode .trip-input,
+    body.dark-mode .bus-search-input,
+    body.dark-mode .route-mode-tabs {
+      background: #020617;
+      border-color: #334155;
+      color: #F8FAFC;
+    }
+    .quick-card,
+    .feature-card,
+    .parking-card,
+    .bus-line-card,
+    .trip-card,
+    .route-option,
+    .traffic-intersection-card {
+      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+    }
+    .quick-card:hover,
+    .feature-card:hover,
+    .parking-card:hover,
+    .bus-line-card:hover,
+    .trip-card:hover,
+    .route-option:hover,
+    .traffic-intersection-card:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 14px 30px rgba(15,23,42,0.14);
+    }
+    .content-panel.visible {
+      animation: panelIn 260ms ease both;
+    }
+    @keyframes panelIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .focus-ring:focus,
+    button:focus-visible,
+    input:focus-visible,
+    .chip:focus-visible,
+    .nav-item:focus-visible {
+      outline: 3px solid rgba(37,99,235,0.35);
+      outline-offset: 2px;
+    }
+    .splash-screen {
+      position: absolute;
+      inset: 0;
+      z-index: 2000;
+      align-items: center;
+      background: linear-gradient(145deg, #eff6ff, #dbeafe 45%, #eef2ff);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      transition: opacity 400ms ease, visibility 400ms ease;
+    }
+    .splash-screen.done { opacity: 0; visibility: hidden; pointer-events: none; }
+    .splash-logo {
+      align-items: center;
+      color: #1E293B;
+      display: flex;
+      font-size: 24px;
+      font-weight: 900;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+    .splash-logo-mark {
+      align-items: center;
+      background: #2563EB;
+      border-radius: 16px;
+      color: #fff;
+      display: flex;
+      height: 46px;
+      justify-content: center;
+      width: 46px;
+    }
+    .city-build rect,
+    .city-build path {
+      animation: buildCity 1400ms ease both;
+      transform-origin: bottom;
+    }
+    .city-build rect:nth-child(2) { animation-delay: 140ms; }
+    .city-build rect:nth-child(3) { animation-delay: 260ms; }
+    .city-build rect:nth-child(4) { animation-delay: 380ms; }
+    .city-build path { animation-delay: 520ms; }
+    @keyframes buildCity {
+      from { opacity: 0; transform: scaleY(0.2) translateY(18px); }
+      to { opacity: 1; transform: scaleY(1) translateY(0); }
+    }
+    .top-pill {
+      align-items: center;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(15,23,42,0.08);
+      border-radius: 999px;
+      color: #1E293B;
+      display: inline-flex;
+      font-size: 10px;
+      font-weight: 900;
+      gap: 5px;
+      min-height: 30px;
+      padding: 0 7px;
+    }
+    .city-score {
+      background: linear-gradient(135deg, #22C55E, #2563EB);
+      color: #fff;
+      animation: scorePulse 2s ease-in-out infinite;
+    }
+    @keyframes scorePulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    .utility-btn {
+      align-items: center;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(15,23,42,0.08);
+      border-radius: 999px;
+      color: #1E293B;
+      cursor: pointer;
+      display: flex;
+      font-size: 11px;
+      font-weight: 900;
+      height: 32px;
+      justify-content: center;
+      min-width: 32px;
+      padding: 0 8px;
+    }
+    .map-floating-stack {
+      bottom: 282px;
+      display: grid;
+      gap: 8px;
+      left: 14px;
+      position: absolute;
+      z-index: 52;
+    }
+    .floating-map-btn,
+    .citybot-toggle {
+      align-items: center;
+      background: #fff;
+      border: 1px solid #E5E7EB;
+      border-radius: 999px;
+      box-shadow: 0 10px 24px rgba(15,23,42,0.14);
+      color: #2563EB;
+      cursor: pointer;
+      display: flex;
+      font: inherit;
+      font-size: 11px;
+      font-weight: 900;
+      gap: 6px;
+      min-height: 38px;
+      padding: 0 12px;
+    }
+    .citybot-toggle {
+      bottom: 92px;
+      position: absolute;
+      right: 14px;
+      z-index: 70;
+    }
+    .citybot-panel,
+    .incident-panel,
+    .onboarding,
+    .demo-tooltip {
+      background: #fff;
+      border: 1px solid #E5E7EB;
+      border-radius: 18px;
+      box-shadow: 0 24px 60px rgba(15,23,42,0.24);
+      z-index: 120;
+    }
+    .citybot-panel {
+      bottom: 138px;
+      display: none;
+      padding: 12px;
+      position: absolute;
+      right: 14px;
+      width: 300px;
+    }
+    .citybot-panel.open { display: block; animation: panelIn 220ms ease both; }
+    .citybot-log {
+      display: grid;
+      gap: 8px;
+      max-height: 180px;
+      overflow-y: auto;
+      padding-bottom: 8px;
+    }
+    .bot-msg,
+    .user-msg {
+      border-radius: 12px;
+      font-size: 11px;
+      line-height: 1.45;
+      padding: 8px 10px;
+    }
+    .bot-msg { background: #EFF6FF; color: #1E3A8A; }
+    .user-msg { background: #F8FAFC; color: #111827; text-align: right; }
+    .citybot-input-row { display: flex; gap: 6px; }
+    .citybot-input-row input {
+      border: 1px solid #E5E7EB;
+      border-radius: 12px;
+      flex: 1;
+      font: inherit;
+      font-size: 11px;
+      min-height: 34px;
+      padding: 0 9px;
+    }
+    .incident-panel {
+      display: none;
+      left: 18px;
+      padding: 13px;
+      position: absolute;
+      right: 18px;
+      top: 132px;
+      z-index: 130;
+    }
+    .incident-panel.open { display: block; }
+    .incident-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin: 10px 0; }
+    .incident-choice {
+      border: 1px solid #E5E7EB;
+      border-radius: 12px;
+      background: #F8FAFC;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 800;
+      min-height: 38px;
+    }
+    .incident-choice.active { background: #FEE2E2; border-color: #EF4444; color: #B91C1C; }
+    .onboarding {
+      display: none;
+      inset: 18px;
+      padding: 20px;
+      position: absolute;
+      z-index: 1800;
+    }
+    .onboarding.open { display: grid; align-content: center; }
+    .onboarding-slide { display: none; text-align: center; }
+    .onboarding-slide.active { display: block; animation: panelIn 220ms ease both; }
+    .onboarding-title { color: #111827; font-size: 21px; font-weight: 900; margin: 12px 0 8px; }
+    .onboarding-copy { color: #64748B; font-size: 13px; line-height: 1.5; }
+    .demo-tooltip {
+      display: none;
+      left: 24px;
+      padding: 12px;
+      position: absolute;
+      right: 24px;
+      top: 126px;
+      z-index: 1700;
+    }
+    .demo-tooltip.open { display: block; animation: panelIn 220ms ease both; }
+    .demo-target {
+      box-shadow: 0 0 0 4px rgba(37,99,235,0.28), 0 0 0 999px rgba(15,23,42,0.28) !important;
+      position: relative;
+      z-index: 1600 !important;
+    }
+    .skeleton-layer {
+      display: none;
+      inset: 0;
+      pointer-events: none;
+      position: absolute;
+      z-index: 1500;
+    }
+    .skeleton-layer.show { display: block; }
+    .skeleton-card {
+      animation: shimmer 1.2s linear infinite;
+      background: linear-gradient(90deg, #E5E7EB 25%, #F8FAFC 50%, #E5E7EB 75%);
+      background-size: 200% 100%;
+      border-radius: 14px;
+      height: 56px;
+      margin: 12px 18px;
+    }
+    @keyframes shimmer {
+      from { background-position: 200% 0; }
+      to { background-position: -200% 0; }
+    }
+    .data-refresh {
+      align-items: center;
+      background: rgba(255,255,255,0.95);
+      border: 1px solid #E5E7EB;
+      border-radius: 999px;
+      color: #2563EB;
+      display: none;
+      font-size: 10px;
+      font-weight: 900;
+      gap: 6px;
+      left: 50%;
+      padding: 7px 10px;
+      position: absolute;
+      top: 126px;
+      transform: translateX(-50%);
+      z-index: 80;
+    }
+    .data-refresh.show { display: flex; }
+    .spinner {
+      animation: spin 800ms linear infinite;
+      border: 2px solid #BFDBFE;
+      border-top-color: #2563EB;
+      border-radius: 999px;
+      height: 14px;
+      width: 14px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .traffic-pulse,
+    .incident-marker {
+      align-items: center;
+      border: 2px solid #fff;
+      border-radius: 999px;
+      box-shadow: 0 0 0 0 rgba(239,68,68,0.45);
+      color: #fff;
+      display: flex;
+      font-size: 13px;
+      font-weight: 900;
+      height: 30px;
+      justify-content: center;
+      width: 30px;
+      animation: incidentPulse 1.6s ease-out infinite;
+    }
+    @keyframes incidentPulse {
+      70% { box-shadow: 0 0 0 14px rgba(239,68,68,0); }
+      100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); }
+    }
+    .camera-marker { animation: cameraSpin 3s linear infinite; }
+    @keyframes cameraSpin { to { transform: rotate(360deg); } }
+    .parking-tools,
+    .insight-grid,
+    .network-card {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .parking-filter-row { display: flex; gap: 7px; overflow-x: auto; scrollbar-width: none; }
+    .parking-filter-chip {
+      background: #fff;
+      border: 1px solid #E5E7EB;
+      border-radius: 999px;
+      color: #374151;
+      cursor: pointer;
+      flex: 0 0 auto;
+      font: inherit;
+      font-size: 10px;
+      font-weight: 900;
+      padding: 7px 10px;
+    }
+    .parking-filter-chip.active { background: #2563EB; border-color: #2563EB; color: #fff; }
+    .parking-qr {
+      background:
+        linear-gradient(90deg, #111827 50%, transparent 0) 0 0 / 6px 6px,
+        linear-gradient(#111827 50%, transparent 0) 0 0 / 6px 6px,
+        #fff;
+      border: 6px solid #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 0 1px #E5E7EB;
+      height: 46px;
+      width: 46px;
+    }
+    .parking-prediction { height: 34px; width: 100%; }
+    .bottom-footer {
+      color: #94A3B8;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 16px 0 4px;
+      text-align: center;
+    }
+    .confetti-piece {
+      animation: confettiFall 1100ms ease-in forwards;
+      height: 9px;
+      position: absolute;
+      top: -12px;
+      width: 6px;
+      z-index: 2500;
+    }
+    @keyframes confettiFall {
+      to { transform: translateY(920px) rotate(420deg); opacity: 0; }
+    }
   </style>
 </head>
 <body>
 <div id="cf-app">
+  <!-- ═══ SPLASH SCREEN ═══ -->
+  <div class="splash-screen" id="splashScreen" aria-label="Chargement CityFlow">
+    <div class="splash-logo"><span class="splash-logo-mark">CF</span> City<span style="color:#2563EB">Flow</span></div>
+    <svg class="city-build" width="190" height="94" viewBox="0 0 190 94" aria-hidden="true">
+      <rect x="16" y="38" width="24" height="42" rx="4" fill="#2563EB"/>
+      <rect x="52" y="22" width="28" height="58" rx="4" fill="#7C3AED"/>
+      <rect x="92" y="32" width="22" height="48" rx="4" fill="#0EA5E9"/>
+      <rect x="128" y="16" width="34" height="64" rx="4" fill="#22C55E"/>
+      <path d="M8 82 C46 65 78 96 116 76 C142 62 159 67 184 52" fill="none" stroke="#EF4444" stroke-width="6" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <!-- ═══ ONBOARDING ═══ -->
+  <div class="onboarding" id="onboarding" role="dialog" aria-modal="true" aria-label="Presentation CityFlow">
+    <div class="onboarding-slide active" data-slide="0">
+      <svg width="96" height="96" viewBox="0 0 96 96"><circle cx="48" cy="48" r="42" fill="#EFF6FF"/><path d="M25 54 48 24l23 30-23 18-23-18Z" fill="#2563EB"/></svg>
+      <div class="onboarding-title">Bienvenue sur CityFlow</div>
+      <div class="onboarding-copy">Une carte intelligente pour trafic, bus, parkings et trajets urbains.</div>
+    </div>
+    <div class="onboarding-slide" data-slide="1">
+      <svg width="96" height="96" viewBox="0 0 96 96"><circle cx="48" cy="48" r="42" fill="#F0FDF4"/><path d="M24 58h48M30 42h36M38 28h20" stroke="#22C55E" stroke-width="8" stroke-linecap="round"/></svg>
+      <div class="onboarding-title">Décisions en temps réel</div>
+      <div class="onboarding-copy">Heatmap trafic, incidents, météo, ETA et disponibilité parking simulés.</div>
+    </div>
+    <div class="onboarding-slide" data-slide="2">
+      <svg width="96" height="96" viewBox="0 0 96 96"><circle cx="48" cy="48" r="42" fill="#EEF2FF"/><rect x="28" y="30" width="40" height="34" rx="10" fill="#7C3AED"/><circle cx="40" cy="66" r="4" fill="#111827"/><circle cx="56" cy="66" r="4" fill="#111827"/></svg>
+      <div class="onboarding-title">CityBot vous guide</div>
+      <div class="onboarding-copy">Posez vos questions sur le meilleur parking, le bus ou les embouteillages.</div>
+    </div>
+    <button class="trip-btn primary" type="button" onclick="nextOnboardingSlide()" style="margin-top:18px">Continuer</button>
+  </div>
+
   <div id="map" aria-label="Interactive Marrakech map"></div>
 
   <!-- ═══ MAP SVG BACKGROUND ═══ -->
@@ -1840,7 +2273,11 @@
       <span class="logo-text">City<span>Flow</span></span>
     </div>
     <div class="top-actions">
-      <div class="icon-btn">
+      <div class="top-pill city-score" id="cityScoreBadge" aria-label="CityScore">88</div>
+      <div class="top-pill" id="weatherWidget" aria-label="Meteo">--°</div>
+      <button class="utility-btn" type="button" aria-label="Mode sombre" onclick="toggleDarkMode()">☾</button>
+      <button class="utility-btn" type="button" aria-label="Mode demo" onclick="startDemoTour()">D</button>
+      <div class="icon-btn" role="button" tabindex="0" aria-label="Notifications" onclick="requestCityNotification()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2" stroke-linecap="round">
           <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
           <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
@@ -2011,6 +2448,19 @@
           <button class="trip-btn muted" type="button" style="margin-top:10px;width:100%" onclick="showAllBusLines()">Afficher toutes les lignes</button>
         </div>
         <div id="selectedLineDetails"></div>
+        <div class="network-card">
+          <div class="trip-card-title">Mini reseau bus</div>
+          <svg viewBox="0 0 320 120" width="100%" height="120" role="img" aria-label="Mini plan reseau bus">
+            <path d="M20 92 C82 72 100 34 160 50 S226 88 300 28" fill="none" stroke="#2563EB" stroke-width="7" stroke-linecap="round"/>
+            <path d="M28 30 H112 C150 30 172 88 218 88 H300" fill="none" stroke="#22C55E" stroke-width="6" stroke-linecap="round"/>
+            <path d="M44 104 L126 62 L204 40 L286 74" fill="none" stroke="#7C3AED" stroke-width="5" stroke-linecap="round"/>
+            <g fill="#fff" stroke="#111827" stroke-width="2">
+              <circle cx="20" cy="92" r="6"/><circle cx="160" cy="50" r="6"/><circle cx="300" cy="28" r="6"/>
+              <circle cx="112" cy="30" r="6"/><circle cx="218" cy="88" r="6"/><circle cx="286" cy="74" r="6"/>
+            </g>
+          </svg>
+          <button class="trip-btn muted" type="button" onclick="subscribeDelayAlerts()">M'alerter si retard &gt; 5 min</button>
+        </div>
         <div id="busLinesList" class="bus-lines-list"></div>
         <div class="bs-title">
           Public Transport
@@ -2077,6 +2527,16 @@
           <span class="bs-back" onclick="setChip('map')">Retour</span>
         </div>
         <div class="parking-subtitle">Trouvez et reservez une place disponible a Marrakech</div>
+        <div class="parking-tools">
+          <div class="parking-filter-row">
+            <button class="parking-filter-chip active" type="button" data-parking-filter="all" onclick="setParkingTypeFilter('all')">Tous</button>
+            <button class="parking-filter-chip" type="button" data-parking-filter="underground" onclick="setParkingTypeFilter('underground')">Souterrain</button>
+            <button class="parking-filter-chip" type="button" data-parking-filter="surface" onclick="setParkingTypeFilter('surface')">Surface</button>
+            <button class="parking-filter-chip" type="button" data-parking-filter="pmr" onclick="setParkingTypeFilter('pmr')">PMR</button>
+            <button class="parking-filter-chip" type="button" data-parking-filter="bike" onclick="setParkingTypeFilter('bike')">Velo</button>
+          </div>
+          <button class="trip-btn muted" type="button" onclick="toggleParkingView()">Vue liste / carte</button>
+        </div>
         <div id="parkingCards" class="parking-list"></div>
       </div>
 
@@ -2204,9 +2664,15 @@
             <div style="font-size:10px;color:#9ca3af;margin-top:3px">1 hr ago</div>
           </div>
         </div>
+        <div class="traffic-intersection-card">
+          <div class="traffic-card-name">Insights ville</div>
+          <div class="traffic-card-sub">CityScore, congestion, parking et bus</div>
+          <div id="insightsDashboard" class="insight-grid"></div>
+        </div>
       </div>
 
     </div><!-- /bs-content -->
+    <div class="bottom-footer">CityFlow © 2026 — Smart City Hackathon</div>
   </div><!-- /bottom-sheet -->
 
   <!-- ═══ BOTTOM NAVIGATION ═══ -->
@@ -2246,6 +2712,43 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
+  <!-- ═══ FLOATING SMART CONTROLS ═══ -->
+  <div class="map-floating-stack" aria-label="Actions carte">
+    <button class="floating-map-btn" type="button" onclick="locateUser()">Ma position</button>
+    <button class="floating-map-btn" type="button" onclick="openIncidentPanel()">Signaler incident</button>
+    <button class="floating-map-btn" type="button" onclick="shareMyPosition()">Partager position</button>
+  </div>
+  <div class="data-refresh" id="dataRefresh"><span class="spinner"></span> Mise a jour</div>
+  <div class="skeleton-layer show" id="skeletonLayer">
+    <div class="skeleton-card" style="margin-top:140px"></div>
+    <div class="skeleton-card"></div>
+    <div class="skeleton-card"></div>
+  </div>
+  <div class="incident-panel" id="incidentPanel" role="dialog" aria-label="Signaler un incident">
+    <div class="trip-card-title">Signaler un incident</div>
+    <div class="incident-grid">
+      <button class="incident-choice active" type="button" data-incident-type="accident" onclick="selectIncidentType('accident')">Accident</button>
+      <button class="incident-choice" type="button" data-incident-type="travaux" onclick="selectIncidentType('travaux')">Travaux</button>
+      <button class="incident-choice" type="button" data-incident-type="obstacle" onclick="selectIncidentType('obstacle')">Obstacle</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <button class="trip-btn primary" type="button" onclick="submitIncident()">Envoyer</button>
+      <button class="trip-btn muted" type="button" onclick="closeIncidentPanel()">Annuler</button>
+    </div>
+  </div>
+  <button class="citybot-toggle" type="button" aria-label="Ouvrir CityBot" onclick="toggleCityBot()">CityBot</button>
+  <div class="citybot-panel" id="cityBotPanel" aria-label="Assistant CityBot">
+    <div class="trip-card-title">CityBot</div>
+    <div class="citybot-log" id="cityBotLog">
+      <div class="bot-msg">Bonjour, demandez-moi le parking le moins cher, le bus pour le centre ou comment eviter le trafic.</div>
+    </div>
+    <div class="citybot-input-row">
+      <input id="cityBotInput" type="text" placeholder="Posez une question..." onkeydown="if(event.key==='Enter') askCityBot()"/>
+      <button class="trip-btn primary" type="button" onclick="askCityBot()" style="width:auto;min-height:34px">OK</button>
+    </div>
+  </div>
+  <div class="demo-tooltip" id="demoTooltip"></div>
+
 </div><!-- /cf-app -->
 
 <script
@@ -2267,12 +2770,19 @@
   let parkingUserLocationLabel = '';
   let parkingSelectionMode = false;
   let activeParkingSearchRadiusKm = 1;
+  let activeParkingTypeFilter = 'all';
+  let parkingViewMode = 'list';
   let parkingLiveSimulationInterval = null;
   let trafficIntersections = [];
   let initialTrafficCounts = {};
   let trafficIntersectionMarkers = [];
   let trafficCameraMarkers = [];
   let trafficRoadSegments = [];
+  let trafficHeatLayers = [];
+  let incidentMarkers = [];
+  let selectedIncidentType = 'accident';
+  let etaClickPoints = [];
+  let etaLine = null;
   let trafficSimulationInterval = null;
   let trafficSimulationRunning = false;
   let reservationCountdownInterval = null;
@@ -2311,6 +2821,7 @@
   const activeReservations = [];
   const RESERVATION_TIMEOUT = 120000;
   const DEFAULT_USER_POSITION = [31.6295, -7.9811];
+  let currentUserPosition = DEFAULT_USER_POSITION;
   const highlightedBoulevard = [
     [31.6552, -8.0192],
     [31.6536, -8.0191],
@@ -2328,6 +2839,17 @@
     [31.6348, -8.0161]
   ];
   const highlightedRoads = [highlightedBoulevard];
+  const reportedIncidents = [
+    { id: 'INC-1', type: 'accident', label: 'Accident leger', coords: [31.6369, -8.0021], severity: 'high' },
+    { id: 'INC-2', type: 'travaux', label: 'Travaux voirie', coords: [31.6292, -7.9986], severity: 'medium' },
+    { id: 'INC-3', type: 'obstacle', label: 'Obstacle signale', coords: [31.6412, -8.0111], severity: 'medium' },
+    { id: 'INC-4', type: 'accident', label: 'Accrochage', coords: [31.6244, -7.9932], severity: 'high' },
+    { id: 'INC-5', type: 'travaux', label: 'Deviation temporaire', coords: [31.6317, -8.0081], severity: 'low' },
+    { id: 'INC-6', type: 'obstacle', label: 'Vehicule arrete', coords: [31.6500, -8.0500], severity: 'medium' },
+    { id: 'INC-7', type: 'travaux', label: 'Chaussée reduite', coords: [31.6069, -8.0363], severity: 'low' },
+    { id: 'INC-8', type: 'accident', label: 'Traffic ralenti', coords: [31.6359, -7.9986], severity: 'high' },
+    { id: 'INC-9', type: 'accident', label: 'Alerte Mâalizia - Av. Errazi', coords: [31.6158, -8.0536], severity: 'high' }
+  ];
   const PARKING_SEARCH_RADIUS_KM = 1;
   const PARKING_EXPANDED_RADIUS_KM = 3;
   const marrakechPlaces = [
@@ -2442,6 +2964,9 @@
     }).addTo(cityMap);
 
     drawHighlightedRoads();
+    drawTrafficHeatmap();
+    drawIncidentLayer();
+    drawTrafficFlowPolylines();
     showParkingLotsOnMap();
     drawBusOverviewLines();
 
@@ -2515,12 +3040,26 @@
   }
 
   async function startApp() {
+    // ═══ APP BOOT EXPERIENCE ═══
+    applyTimeTheme();
+    applyStoredDarkMode();
+    setupPwa();
+    setupBottomSheetGestures();
+    setupKeyboardAccess();
+    setupDebouncedSearch();
     await loadParkingLots();
     await loadBusLines();
+    await loadTrafficCameras();
     initLeafletMap();
     populateRouteSuggestions();
     renderBusLinesList();
     renderParkingService();
+    renderInsightsDashboard();
+    updateCityScore();
+    fetchWeather();
+    locateUser(false);
+    scheduleDataRefresh();
+    showStartupMoments();
     startReservationCountdown();
     startParkingLiveSimulation();
   }
@@ -2838,7 +3377,9 @@
       setParkingUserLocation(coords, 'Position choisie sur la carte');
       parkingSelectionMode = false;
       showToast('Position choisie. Recherche des parkings proches.');
+      return;
     }
+    handleEtaClick(coords);
   }
 
   function setStartLocation(coords, label = 'Votre position de depart') {
@@ -3634,7 +4175,13 @@
       </div>
       ${renderAvoidRoadsList()}
       ${trafficIntersections.map(renderTrafficIntersectionCard).join('')}
+      <div class="traffic-intersection-card">
+        <div class="traffic-card-name">Insights ville</div>
+        <div class="traffic-card-sub">Congestion par heure, parking et ponctualite bus</div>
+        <div id="insightsDashboard" class="insight-grid"></div>
+      </div>
     `;
+    renderInsightsDashboard();
   }
 
   function updateCameraVehicleCounts() {
@@ -3652,6 +4199,8 @@
     renderTrafficService();
     drawTrafficRoadSegments();
     showTrafficCameras();
+    drawIncidentLayer();
+    updateCityScore();
   }
 
   function startTrafficCameraSimulation() {
@@ -3702,6 +4251,15 @@
         <span class="bs-back" onclick="setChip('map')">Retour</span>
       </div>
       <div class="parking-subtitle">Trouvez les parkings disponibles dans un rayon de ${radiusLabel}</div>
+      <div class="parking-tools">
+        <div class="parking-filter-row">
+          ${['all:Toutes','underground:Souterrain','surface:Surface','pmr:PMR','bike:Velo'].map(item => {
+            const [value, label] = item.split(':');
+            return `<button class="parking-filter-chip ${activeParkingTypeFilter === value ? 'active' : ''}" type="button" onclick="setParkingTypeFilter('${value}')">${label}</button>`;
+          }).join('')}
+        </div>
+        <button class="trip-btn muted" type="button" onclick="toggleParkingView()">Vue ${parkingViewMode === 'list' ? 'carte' : 'liste'}</button>
+      </div>
       <div class="parking-location-card">
         <div class="parking-location-title">Votre position</div>
         <div class="parking-location-actions">
@@ -3721,6 +4279,10 @@
 
   function renderParkingCards(nearbyParkings = []) {
     if (!parkingUserLocation) return '';
+    if (parkingViewMode === 'map') {
+      return '<div class="parking-empty-state"><div class="parking-name">Vue carte activee</div><div class="parking-address">Les parkings proches sont visibles sur la carte.</div></div>';
+    }
+    nearbyParkings = nearbyParkings.filter(({ parking }) => parkingMatchesFilter(parking));
     if (!nearbyParkings.length) {
       return `
         <div class="parking-empty-state">
@@ -3767,10 +4329,12 @@
               <div class="parking-detail-value">${parking.pricePerHour} DH/h</div>
             </div>
           </div>
+          <svg class="parking-prediction" viewBox="0 0 120 34" aria-label="Prediction occupation">${renderParkingPredictionBars(parking)}</svg>
           ${reservationBlock}
           <div class="parking-actions">
             <button class="parking-btn guide" onclick="guideToParking('${parking.id}')">Me guider</button>
             <button class="parking-btn ${reserveClass}" onclick="reserveParkingSpot('${parking.id}')" ${reserveDisabled}>${reserveText}</button>
+            <div class="parking-qr" aria-label="QR acces rapide"></div>
           </div>
         </article>
       `;
@@ -4001,6 +4565,7 @@
 
     updateParkingServiceUI();
     showToast('Place reservee temporairement.');
+    launchConfetti();
 
     setTimeout(() => {
       expireReservation(reservation.id);
@@ -4197,8 +4762,368 @@
     }, 2600);
   }
 
+  // ═══ HACKATHON SMART FEATURES ═══
+  function applyTimeTheme() {
+    const hour = new Date().getHours();
+    document.body.classList.toggle('night-theme', hour < 7 || hour >= 19);
+    document.body.classList.toggle('day-theme', hour >= 7 && hour < 19);
+  }
+
+  function applyStoredDarkMode() {
+    document.body.classList.toggle('dark-mode', localStorage.getItem('cityflow-dark') === '1');
+  }
+
+  function toggleDarkMode() {
+    const active = !document.body.classList.contains('dark-mode');
+    document.body.classList.toggle('dark-mode', active);
+    localStorage.setItem('cityflow-dark', active ? '1' : '0');
+  }
+
+  function showStartupMoments() {
+    setTimeout(() => document.getElementById('splashScreen')?.classList.add('done'), 2000);
+    setTimeout(() => document.getElementById('skeletonLayer')?.classList.remove('show'), 1200);
+    if (!localStorage.getItem('cityflow-onboarded')) {
+      setTimeout(() => document.getElementById('onboarding')?.classList.add('open'), 2100);
+    }
+    setTimeout(() => showToast('Place disponible a 200m de vous !'), 2600);
+  }
+
+  function nextOnboardingSlide() {
+    const slides = Array.from(document.querySelectorAll('.onboarding-slide'));
+    const current = slides.findIndex(slide => slide.classList.contains('active'));
+    slides[current]?.classList.remove('active');
+    if (current >= slides.length - 1) {
+      localStorage.setItem('cityflow-onboarded', '1');
+      document.getElementById('onboarding')?.classList.remove('open');
+      return;
+    }
+    slides[current + 1]?.classList.add('active');
+  }
+
+  async function fetchWeather() {
+    try {
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${DEFAULT_USER_POSITION[0]}&longitude=${DEFAULT_USER_POSITION[1]}&current=temperature_2m,weather_code`;
+      const data = await fetch(url).then(response => response.json());
+      const temp = Math.round(data.current?.temperature_2m ?? 24);
+      document.getElementById('weatherWidget').textContent = `${temp}°`;
+    } catch {
+      document.getElementById('weatherWidget').textContent = '24°';
+    }
+  }
+
+  function locateUser(showFeedback = true) {
+    if (!navigator.geolocation) {
+      if (showFeedback) showToast('Geolocalisation non disponible.');
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(position => {
+      currentUserPosition = [position.coords.latitude, position.coords.longitude];
+      if (cityMap) cityMap.flyTo(currentUserPosition, 14, { duration: 0.6 });
+      if (showFeedback) showToast('Position detectee.');
+    }, () => {
+      currentUserPosition = DEFAULT_USER_POSITION;
+      if (showFeedback) showToast('Position par defaut Marrakech utilisee.');
+    });
+  }
+
+  function drawTrafficHeatmap() {
+    if (!cityMap || trafficHeatLayers.length) return;
+    const heatPoints = [
+      { coords: [31.6359, -7.9986], color: '#EF4444', radius: 360 },
+      { coords: [31.6317, -8.0081], color: '#F59E0B', radius: 310 },
+      { coords: [31.6244, -7.9932], color: '#22C55E', radius: 260 },
+      { coords: [31.6394, -8.0066], color: '#F97316', radius: 330 }
+    ];
+    trafficHeatLayers = heatPoints.map(point => L.circle(point.coords, {
+      radius: point.radius,
+      color: point.color,
+      fillColor: point.color,
+      fillOpacity: 0.16,
+      opacity: 0.22,
+      weight: 1
+    }).addTo(cityMap));
+  }
+
+  function drawIncidentLayer() {
+    if (!cityMap) return;
+    incidentMarkers.forEach(marker => marker.remove());
+    incidentMarkers = reportedIncidents.map(incident => L.marker(incident.coords, {
+      icon: L.divIcon({
+        className: '',
+        html: `<div class="incident-marker" style="background:${incident.severity === 'high' ? '#EF4444' : incident.severity === 'medium' ? '#F97316' : '#22C55E'}">${incident.type === 'travaux' ? 'T' : incident.type === 'obstacle' ? '!' : 'A'}</div>`,
+        iconSize: [30, 30],
+        iconAnchor: [15, 15]
+      })
+    }).addTo(cityMap).bindPopup(`${incident.label}<br>${incident.type}`));
+  }
+
+  function drawTrafficFlowPolylines() {
+    if (!cityMap) return;
+    const flows = [
+      { path: [[31.6370, -8.0100], [31.6317, -8.0081], [31.6244, -7.9932]], color: '#22C55E' },
+      { path: [[31.6394, -8.0066], [31.6359, -7.9986], [31.6292, -7.9986]], color: '#F59E0B' },
+      { path: [[31.6359, -7.9986], [31.6369, -8.0021], [31.6412, -8.0111]], color: '#EF4444' }
+    ];
+    flows.forEach(flow => L.polyline(flow.path, { color: flow.color, weight: 5, opacity: 0.66, lineCap: 'round' }).addTo(cityMap));
+  }
+
+  function openIncidentPanel() {
+    document.getElementById('incidentPanel')?.classList.add('open');
+  }
+
+  function closeIncidentPanel() {
+    document.getElementById('incidentPanel')?.classList.remove('open');
+  }
+
+  function selectIncidentType(type) {
+    selectedIncidentType = type;
+    document.querySelectorAll('.incident-choice').forEach(button => button.classList.toggle('active', button.dataset.incidentType === type));
+  }
+
+  function submitIncident() {
+    const incident = {
+      id: `INC-${Date.now()}`,
+      type: selectedIncidentType,
+      label: selectedIncidentType === 'travaux' ? 'Travaux signales' : selectedIncidentType === 'obstacle' ? 'Obstacle signale' : 'Accident signale',
+      coords: currentUserPosition,
+      severity: selectedIncidentType === 'accident' ? 'high' : 'medium'
+    };
+    reportedIncidents.push(incident);
+    drawIncidentLayer();
+    closeIncidentPanel();
+    showToast('Incident signale. Merci pour votre contribution.');
+  }
+
+  function handleEtaClick(coords) {
+    etaClickPoints.push(coords);
+    if (etaClickPoints.length < 2) {
+      showToast('Cliquez un deuxieme point pour calculer un ETA.');
+      return;
+    }
+    const [a, b] = etaClickPoints.slice(-2);
+    if (etaLine) etaLine.remove();
+    etaLine = L.polyline([a, b], { color: '#7C3AED', weight: 4, dashArray: '6 8' }).addTo(cityMap);
+    const minutes = Math.max(2, Math.round((haversineDistance(a, b) * 1000) / 420));
+    showToast(`ETA estime : ${minutes} min`);
+    etaClickPoints = [];
+  }
+
+  function setParkingTypeFilter(filter) {
+    activeParkingTypeFilter = filter;
+    renderParkingService();
+  }
+
+  function parkingMatchesFilter(parking) {
+    if (activeParkingTypeFilter === 'all') return true;
+    const type = parking.type || (parking.id?.length % 2 ? 'surface' : 'underground');
+    if (activeParkingTypeFilter === 'pmr') return parking.accessible !== false;
+    if (activeParkingTypeFilter === 'bike') return parking.bikeSpaces || parking.totalSpaces > 80;
+    return type === activeParkingTypeFilter;
+  }
+
+  function toggleParkingView() {
+    parkingViewMode = parkingViewMode === 'list' ? 'map' : 'list';
+    renderParkingService();
+    if (parkingViewMode === 'map' && parkingUserLocation) showParkingLotsOnMap();
+  }
+
+  function renderParkingPredictionBars(parking) {
+    const now = new Date().getHours();
+    return Array.from({ length: 8 }).map((_, index) => {
+      const hour = (now + index) % 24;
+      const rush = hour >= 8 && hour <= 10 || hour >= 17 && hour <= 20;
+      const load = Math.min(0.95, Math.max(0.18, 1 - parking.availableSpaces / parking.totalSpaces + (rush ? 0.18 : -0.05) + index * 0.015));
+      const height = Math.round(load * 28);
+      const color = load > 0.75 ? '#EF4444' : load > 0.5 ? '#F59E0B' : '#22C55E';
+      return `<rect x="${index * 15 + 3}" y="${31 - height}" width="9" height="${height}" rx="3" fill="${color}"/>`;
+    }).join('');
+  }
+
+  function launchConfetti() {
+    const colors = ['#2563EB', '#22C55E', '#EF4444', '#F59E0B', '#7C3AED'];
+    for (let i = 0; i < 28; i += 1) {
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.left = `${Math.random() * 100}%`;
+      piece.style.background = colors[i % colors.length];
+      piece.style.animationDelay = `${Math.random() * 180}ms`;
+      document.getElementById('cf-app').appendChild(piece);
+      setTimeout(() => piece.remove(), 1500);
+    }
+  }
+
+  function toggleCityBot() {
+    document.getElementById('cityBotPanel')?.classList.toggle('open');
+  }
+
+  function askCityBot() {
+    const input = document.getElementById('cityBotInput');
+    const log = document.getElementById('cityBotLog');
+    const question = input.value.trim();
+    if (!question || !log) return;
+    log.insertAdjacentHTML('beforeend', `<div class="user-msg">${question}</div>`);
+    input.value = '';
+    const q = normalizeText(question);
+    let answer = 'Je peux aider avec parkings, bus, trafic et trajets CityFlow.';
+    if (q.includes('parking') || q.includes('moins cher')) {
+      const cheapest = parkingLots.slice().sort((a, b) => a.pricePerHour - b.pricePerHour)[0];
+      answer = cheapest ? `Le parking le moins cher est ${cheapest.name}, a ${cheapest.pricePerHour} DH/h.` : answer;
+    } else if (q.includes('embouteillage') || q.includes('trafic') || q.includes('eviter')) {
+      answer = 'Evitez Bab Doukkala et privilégiez les axes verts. Activez Route Planner pour comparer bus, marche et voiture.';
+    } else if (q.includes('bus') || q.includes('centre')) {
+      answer = 'Pour le centre-ville, essayez Ligne 1 ou Ligne 19 selon votre depart. CityFlow peut afficher uniquement la ligne choisie.';
+    }
+    log.insertAdjacentHTML('beforeend', `<div class="bot-msg">${answer}</div>`);
+    log.scrollTop = log.scrollHeight;
+  }
+
+  function updateCityScore() {
+    const summary = getTrafficSummary?.() || { heavy: 1, medium: 2, totalVehicles: 80 };
+    const parkingRatio = parkingLots.length ? parkingLots.reduce((sum, p) => sum + p.availableSpaces / p.totalSpaces, 0) / parkingLots.length : 0.5;
+    const score = Math.max(0, Math.min(100, Math.round(92 - summary.heavy * 9 - summary.medium * 3 + parkingRatio * 12)));
+    const badge = document.getElementById('cityScoreBadge');
+    if (badge) badge.textContent = String(score);
+    return score;
+  }
+
+  function renderInsightsDashboard() {
+    const target = document.getElementById('insightsDashboard');
+    if (!target) return;
+    const score = updateCityScore();
+    target.innerHTML = `
+      <svg viewBox="0 0 260 80" width="100%" height="80">
+        <text x="0" y="14" font-size="11" font-weight="800" fill="#64748B">CityScore ${score}/100</text>
+        <rect x="0" y="28" width="220" height="10" rx="5" fill="#E5E7EB"/><rect x="0" y="28" width="${score * 2.2}" height="10" rx="5" fill="#2563EB"/>
+        ${[42,64,48,70,55,36].map((h,i)=>`<rect x="${i*38}" y="${76-h}" width="22" height="${h}" rx="5" fill="${h>60?'#EF4444':h>48?'#F59E0B':'#22C55E'}"/>`).join('')}
+      </svg>
+    `;
+  }
+
+  function setupBottomSheetGestures() {
+    const sheet = document.getElementById('bottomSheet');
+    if (!sheet) return;
+    let startY = 0;
+    sheet.addEventListener('touchstart', event => { startY = event.touches[0].clientY; }, { passive: true });
+    sheet.addEventListener('touchend', event => {
+      const delta = event.changedTouches[0].clientY - startY;
+      if (delta < -45 && !sheetExpanded) toggleSheet();
+      if (delta > 45 && sheetExpanded) toggleSheet();
+    }, { passive: true });
+  }
+
+  function requestCityNotification() {
+    if (!('Notification' in window)) {
+      showToast('Notifications non supportees.');
+      return;
+    }
+    Notification.requestPermission().then(permission => {
+      if (permission === 'granted') new Notification('CityFlow', { body: 'Trafic dense sur votre trajet habituel.' });
+    });
+  }
+
+  function shareMyPosition() {
+    const link = `https://cityflow.local/share?lat=${currentUserPosition[0].toFixed(5)}&lng=${currentUserPosition[1].toFixed(5)}`;
+    navigator.clipboard?.writeText(link);
+    showToast('Lien de position simule copie.');
+  }
+
+  function subscribeDelayAlerts() {
+    showToast("Alerte activee : retard bus > 5 min.");
+  }
+
+  function setupDebouncedSearch() {
+    const input = document.querySelector('.search-bar input');
+    if (!input) return;
+    let timeout;
+    input.addEventListener('input', event => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        const query = normalizeText(event.target.value);
+        if (query.includes('parking')) setChip('parking');
+        if (query.includes('bus')) setChip('bus');
+        if (query.includes('route') || query.includes('trajet')) setChip('route');
+      }, 300);
+    });
+  }
+
+  function setupKeyboardAccess() {
+    document.querySelectorAll('button, .chip, .nav-item, .icon-btn').forEach(element => {
+      if (!element.hasAttribute('tabindex')) element.setAttribute('tabindex', '0');
+      if (!element.getAttribute('aria-label')) element.setAttribute('aria-label', element.textContent.trim() || 'Action CityFlow');
+    });
+  }
+
+  function setupPwa() {
+    const manifest = {
+      name: 'CityFlow Smart City',
+      short_name: 'CityFlow',
+      start_url: './hackathon.html',
+      display: 'standalone',
+      background_color: '#F8FAFC',
+      theme_color: '#2563EB'
+    };
+    const link = document.createElement('link');
+    link.rel = 'manifest';
+    link.href = `data:application/manifest+json,${encodeURIComponent(JSON.stringify(manifest))}`;
+    document.head.appendChild(link);
+    if ('serviceWorker' in navigator) {
+      const swCode = "self.addEventListener('install',e=>self.skipWaiting());self.addEventListener('fetch',e=>{});";
+      const swUrl = URL.createObjectURL(new Blob([swCode], { type: 'text/javascript' }));
+      navigator.serviceWorker.register(swUrl).catch(() => {});
+    }
+  }
+
+  function scheduleDataRefresh() {
+    setInterval(() => {
+      document.getElementById('dataRefresh')?.classList.add('show');
+      updateCameraVehicleCounts();
+      updateCityScore();
+      renderInsightsDashboard();
+      setTimeout(() => document.getElementById('dataRefresh')?.classList.remove('show'), 1200);
+    }, 30000);
+  }
+
+  function startDemoTour() {
+    const steps = [
+      { selector: '.search-bar', text: 'Recherche rapide avec debounce pour lieux, bus et parkings.' },
+      { selector: '.map-floating-stack', text: 'Actions carte: geolocalisation, incident et partage.' },
+      { selector: '.bottom-sheet', text: 'Bottom sheet mobile avec gestes tactiles.' },
+      { selector: '.citybot-toggle', text: 'CityBot repond aux questions urbaines.' }
+    ];
+    let index = 0;
+    const tooltip = document.getElementById('demoTooltip');
+    const run = () => {
+      document.querySelector('.demo-target')?.classList.remove('demo-target');
+      if (index >= steps.length) {
+        tooltip?.classList.remove('open');
+        return;
+      }
+      const step = steps[index++];
+      document.querySelector(step.selector)?.classList.add('demo-target');
+      tooltip.innerHTML = `<div class="trip-card-title">Demo CityFlow</div><div class="onboarding-copy">${step.text}</div>`;
+      tooltip.classList.add('open');
+      setTimeout(run, 3000);
+    };
+    run();
+  }
+
   window.renderParkingService = renderParkingService;
   window.renderParkingCards = renderParkingCards;
+  window.toggleDarkMode = toggleDarkMode;
+  window.startDemoTour = startDemoTour;
+  window.nextOnboardingSlide = nextOnboardingSlide;
+  window.locateUser = locateUser;
+  window.openIncidentPanel = openIncidentPanel;
+  window.closeIncidentPanel = closeIncidentPanel;
+  window.selectIncidentType = selectIncidentType;
+  window.submitIncident = submitIncident;
+  window.toggleCityBot = toggleCityBot;
+  window.askCityBot = askCityBot;
+  window.requestCityNotification = requestCityNotification;
+  window.shareMyPosition = shareMyPosition;
+  window.setParkingTypeFilter = setParkingTypeFilter;
+  window.toggleParkingView = toggleParkingView;
+  window.subscribeDelayAlerts = subscribeDelayAlerts;
   window.showParkingLotsOnMap = showParkingLotsOnMap;
   window.chooseCurrentLocation = chooseCurrentLocation;
   window.enableParkingLocationSelection = enableParkingLocationSelection;
