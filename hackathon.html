@@ -2818,6 +2818,7 @@
   let overviewRouteLayers = [];
   let highlightedRoadLayers = [];
   let activeBusFilter = 'all';
+  const roadRouteCache = new Map();
   const activeReservations = [];
   const RESERVATION_TIMEOUT = 120000;
   const DEFAULT_USER_POSITION = [31.6295, -7.9811];
@@ -3164,20 +3165,29 @@
     if (action === 'center') cityMap.flyTo(DEFAULT_USER_POSITION, 13, { duration: 0.6 });
   }
 
-  function drawBusOverviewLines() {
+  async function drawBusOverviewLines() {
     if (!cityMap || !window.L || !busLines.length) return;
     overviewRouteLayers.forEach(layer => layer.remove());
     overviewRouteLayers = [];
     if (!activeRouteId) return;
 
-    overviewRouteLayers = busLines
-      .filter(line => activeRouteId === 'all' ? ['urban', 'airport', 'brt'].includes(line.type) : line.id === activeRouteId)
-      .map(line => {
-        const coords = getLineRouteCoords(line);
+    const visibleLines = busLines
+      .filter(line => activeRouteId === 'all' ? ['urban', 'airport', 'brt'].includes(line.type) : line.id === activeRouteId);
+
+    const resolvedRoutes = await Promise.all(visibleLines.map(async line => ({
+      line,
+      coords: await getRoadAwareLineRoute(line)
+    })));
+
+    overviewRouteLayers = resolvedRoutes
+      .map(({ line, coords }) => {
         const layer = L.polyline(coords, {
           color: line.color,
           weight: activeRouteId === 'all' ? 4 : 6,
-          opacity: activeRouteId === 'all' ? 0.42 : 1
+          opacity: activeRouteId === 'all' ? 0.42 : 1,
+          lineCap: 'round',
+          lineJoin: 'round',
+          smoothFactor: 1.1
         }).addTo(cityMap);
         layer.on('click', () => showBusLine(line.id));
         layer.bindPopup(`${line.name}<br>${line.from} -> ${line.to}`);
@@ -3223,24 +3233,37 @@
   function showAllBusLines() {
     clearSelectedLine();
     activeRouteId = 'all';
-    drawBusOverviewLines();
-    if (cityMap && overviewRouteLayers.length) {
-      const points = busLines
-        .filter(line => ['urban', 'airport', 'brt'].includes(line.type))
-        .flatMap(line => getLineRouteCoords(line));
+    drawBusOverviewLines().then(() => {
+      if (!cityMap || !overviewRouteLayers.length) return;
+      const points = overviewRouteLayers.flatMap(layer => layer.getLatLngs().map(latLng => [latLng.lat, latLng.lng]));
       cityMap.fitBounds(L.latLngBounds(points), { padding: [42, 42], maxZoom: 13 });
-    }
+    });
   }
 
-  function showBusLine(lineId) {
+  async function showBusLine(lineId) {
     clearSelectedLine();
     activeRouteId = lineId;
-    setChip('bus');
+    document.querySelectorAll('.chip').forEach(chip =>
+      chip.classList.toggle('active', chip.dataset.chip === 'bus')
+    );
+    showPanel('bus');
+    clearParkingService();
+    clearTrafficLayers();
+    renderBusLinesList();
+    if (!sheetExpanded) toggleSheet();
     const line = busLines.find(item => item.id === lineId);
     if (!line || !cityMap || !window.L) return;
 
-    const routeCoords = getLineRouteCoords(line);
-    selectedRouteLayer = overviewRouteLayers[0] || null;
+    const routeCoords = await getRoadAwareLineRoute(line);
+    selectedRouteLayer = L.polyline(routeCoords, {
+      color: line.color,
+      weight: 7,
+      opacity: 0.95,
+      lineCap: 'round',
+      lineJoin: 'round',
+      smoothFactor: 1.1
+    }).addTo(cityMap);
+    selectedRouteLayer.bindPopup(`${line.name}<br>${line.from} -> ${line.to}`);
 
     selectedStopMarkers = line.stops.map(stopItem =>
       L.circleMarker(stopItem.coords, {
@@ -3305,8 +3328,8 @@
     `;
   }
 
-  function startSelectedBusAnimation(line) {
-    selectedBusRoute = getLineRouteCoords(line);
+  async function startSelectedBusAnimation(line) {
+    selectedBusRoute = await getRoadAwareLineRoute(line);
     if (!selectedBusRoute.length) return;
     selectedBusSegmentIndex = 0;
     selectedBusProgress = 0;
@@ -3343,6 +3366,76 @@
 
   function getLineRouteCoords(line) {
     return line.route && line.route.length ? line.route : line.stops.map(stopItem => stopItem.coords);
+  }
+
+  async function getRoadAwareLineRoute(line) {
+    if (!line) return [];
+    if (line.roadRoute?.length) return line.roadRoute;
+    if (roadRouteCache.has(line.id)) return roadRouteCache.get(line.id);
+
+    const fallbackRoute = densifyRoute(getLineRouteCoords(line));
+    const routePromise = fetchRoadRoute(getLineRouteCoords(line))
+      .then(route => route.length ? route : fallbackRoute)
+      .catch(() => fallbackRoute)
+      .then(route => {
+        line.roadRoute = route;
+        return route;
+      });
+
+    roadRouteCache.set(line.id, routePromise);
+    return routePromise;
+  }
+
+  async function fetchRoadRoute(coords) {
+    const waypoints = normalizeRoadWaypoints(coords);
+    if (waypoints.length < 2) return waypoints;
+
+    const osrmCoords = waypoints
+      .map(coord => `${coord[1].toFixed(6)},${coord[0].toFixed(6)}`)
+      .join(';');
+    const url = `https://router.project-osrm.org/route/v1/driving/${osrmCoords}?overview=full&geometries=geojson&continue_straight=false`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Road routing unavailable');
+
+    const data = await response.json();
+    const route = data.routes?.[0]?.geometry?.coordinates;
+    if (!route?.length) return [];
+    return route.map(([lng, lat]) => [lat, lng]);
+  }
+
+  function normalizeRoadWaypoints(coords) {
+    const unique = [];
+    coords.forEach(coord => {
+      const previous = unique[unique.length - 1];
+      if (!previous || haversineDistance(previous, coord) > 0.03) unique.push(coord);
+    });
+
+    if (unique.length <= 24) return unique;
+    const sampled = [unique[0]];
+    const step = (unique.length - 1) / 22;
+    for (let index = 1; index < 23; index += 1) {
+      sampled.push(unique[Math.round(index * step)]);
+    }
+    sampled.push(unique[unique.length - 1]);
+    return sampled;
+  }
+
+  function densifyRoute(coords) {
+    if (coords.length < 2) return coords;
+    const dense = [];
+    coords.forEach((coord, index) => {
+      if (index === 0) {
+        dense.push(coord);
+        return;
+      }
+      const previous = coords[index - 1];
+      const distanceKm = haversineDistance(previous, coord);
+      const segments = Math.max(1, Math.ceil(distanceKm / 0.18));
+      for (let segment = 1; segment <= segments; segment += 1) {
+        dense.push(interpolatePosition(previous, coord, segment / segments));
+      }
+    });
+    return dense;
   }
 
   function enableStartSelection() {
